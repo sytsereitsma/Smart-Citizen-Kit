@@ -1,0 +1,5 @@
+Build from forked master:
+	Sketch uses 24398 bytes (85%) of program storage space. Maximum is 28672 bytes.
+	Global variables use 2108 bytes (82%) of dynamic memory, leaving 452 bytes for local variables. Maximum is 2560 bytes.
+	Low memory available, stability problems may occur.
+
