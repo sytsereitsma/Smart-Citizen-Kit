@@ -4,6 +4,10 @@
   Defines ATMEGA32U4 pins and other SENSORS and COMUNICATIONS static parameters.
 
 */
+#ifndef __CONSTANTS_H_
+#define __CONSTANTS_H_
+
+#include <stdint.h>
 
 #define debugEnabled   true
 #define decouplerComp   true   //Only for version Goteo 1.0
@@ -38,14 +42,10 @@ WIFLY Firmware Setting
 
 #define networks 0
 #if (networks > 0)
-static char* mySSID[networks]      = { 
-  "SSID1"        , "SSID2"     };
-static char* myPassword[networks]  = { 
-  "PASS1"      , "PASS2"          };
-static char* wifiEncript[networks] = { 
-  WPA2         , WPA2                };
-static char* antennaExt[networks]  = { 
-  INT_ANT      , INT_ANT             };
+extern const char* mySSID[networks];
+extern const char* myPassword[networks];
+extern const char* wifiEncript[networks];
+extern const char* antennaExt[networks];
 #endif      
 
 #define TWI_FREQ 400000L //Frecuencia bus I2C
@@ -184,9 +184,9 @@ MICS PARAMETERS - Gas Sensor Addresses and Defaults
   #define  VMIC1 2500.
 #endif
 
-#define reference 2560.
-#define second 1000
-#define minute 60000
+constexpr double reference { 2560 };
+constexpr uint16_t second { 1000 };
+constexpr uint16_t minute { 60000 };
 
 /* 
 
@@ -212,73 +212,19 @@ BATTERY PARAMETERS - Battery sensing calibration parameters
 
 #define  SENSORS 9  //Numbers of sensors in the board
 
-#define buffer_length        32
-static char buffer[buffer_length];
+constexpr int8_t buffer_length {32};
+extern char buffer[buffer_length];
 
 // Basic Server Posts to the SmartCitizen Platform - EndPoint: http://data.smartcitizen.me/add 
-static char* WEB[8]={
-                  "data.smartcitizen.me",
-                  "PUT /add HTTP/1.1\n", 
-                  "Host: data.smartcitizen.me \n", 
-                  "User-Agent: SmartCitizen \n", 
-                  "X-SmartCitizenMacADDR: ", 
-                  "X-SmartCitizenApiKey: ", 
-                  "X-SmartCitizenVersion: ",  
-                  "X-SmartCitizenData: "};
+extern const char* WEB[8];
   
 // Time server request -  EndPoint: http://data.smartcitizen.me/datetime                 
-static char* WEBTIME[3]={                  
-                  /*Servidor de tiempo*/
-                  "GET /datetime HTTP/1.1\n",
-                  "Host: data.smartcitizen.me \n",
-                  "User-Agent: SmartCitizen \n\n"  
-                  };
-
+extern const char* WEBTIME[3];
 // Data JSON structure                  
-static char* SERVER[11]={
-                  "{\"temp\":\"",
-                  "\",\"hum\":\"", 
-                  "\",\"light\":\"",
-                  "\",\"bat\":\"",
-                  "\",\"panel\":\"",
-                  "\",\"co\":\"", 
-                  "\",\"no2\":\"", 
-                  "\",\"noise\":\"", 
-                  "\",\"nets\":\"", 
-                  "\",\"timestamp\":\"", 
-                  "\"}"
-                  };
+extern const char* SERVER[11];
                   
-static char* SENSOR[10]={
-                  "Temperature: ",
-                  "Humidity: ",
-                  "Light: ",
-                  "Battery: ",
-                  "Solar Panel: ",
-                  "Carbon Monxide: ",
-                  "Nitrogen Dioxide: ",
-                  "Noise: ",
-                  "Wifi Spots: ",
-                  "UTC: " 
-                };
+extern const char* SENSOR[10];
 
-static char* UNITS[9]={
-                  #if F_CPU == 8000000 
-                    " C RAW",
-                    " % RAW",
-                  #else
-                    " C",
-                    " %",
-                  #endif
-                  #if F_CPU == 8000000 
-                    " lx",
-                  #else
-                    " %",
-                  #endif
-                    " %",
-                    " mV",
-                    " kOhm",
-                    " kOhm",
-                    " mV",
-                    "",
-                  };  
+extern const char* UNITS[9];  
+
+#endif// __CONSTANTS_H_

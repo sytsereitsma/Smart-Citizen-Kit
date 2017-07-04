@@ -24,8 +24,8 @@ public:
     void eepromCheck();
     void clearmemory();
     float average(int anaPin);
-    boolean checkText(char* text, char* text1);
-    boolean compareData(char* text, char* text1);
+    boolean checkText(const char* text, char* text1);
+    boolean compareData(const char* text, const char* text1);
     void writeMCP(byte deviceaddress, byte address, int data );
     int readMCP(int deviceaddress, uint16_t address );
     float readCharge();
@@ -57,8 +57,8 @@ public:
                         boolean isMultipartCommand,
                         const char *expectedResponse);
     boolean enterCommandMode();
-    boolean sleep();
-    boolean reset();
+    void sleep();
+    void reset();
     boolean exitCommandMode();
     boolean connect();
     void APmode(char* ssid);

@@ -134,7 +134,7 @@ void SCKAmbient::ini()
     debugON = false;
     /*init WiFly*/
     digitalWrite(AWAKE, HIGH); 
-    sensor_mode = sensor_mode = base_.readData(EE_ADDR_SENSOR_MODE, INTERNAL);  //Normal mode
+    sensor_mode = base_.readData(EE_ADDR_SENSOR_MODE, INTERNAL);  //Normal mode
     TimeUpdate = base_.readData(EE_ADDR_TIME_UPDATE, INTERNAL);    //Time between transmissions in sec.
     NumUpdates = base_.readData(EE_ADDR_NUMBER_UPDATES, INTERNAL); //Number of readings before batch update
     nets = base_.readData(EE_ADDR_NUMBER_NETS, INTERNAL);
@@ -655,7 +655,6 @@ void SCKAmbient::ini()
      delay(100);
     #endif
     float mVRaw = (float)((base_.average(S4))/1023.)*Vcc;
-    float dB = 0;
     return mVRaw;  
   }
   
@@ -694,7 +693,6 @@ void SCKAmbient::ini()
   void SCKAmbient::updateSensors(byte mode) 
    {   
       boolean ok_read = false; 
-      byte    retry   = 0;
       
       #if F_CPU == 8000000 
         getSHT21();
@@ -899,7 +897,7 @@ int SCKAmbient::addData(byte inByte)
   }
 
     
-boolean SCKAmbient::printNetWorks(unsigned int address_eeprom, boolean endLine=true)
+void SCKAmbient::printNetWorks(unsigned int address_eeprom, boolean endLine=true)
     {
       int nets_temp = base_.readData(EE_ADDR_NUMBER_NETS, INTERNAL);
       if (nets_temp>0){

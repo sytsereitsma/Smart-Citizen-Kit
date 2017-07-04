@@ -101,7 +101,7 @@ float SCKBase::average(int anaPin) {
   return(average);
 }
 
-boolean SCKBase::checkText(char* text, char *text1)
+boolean SCKBase::checkText(const char* text, char *text1)
 {
   byte check = 0;
   byte limit = strlen(text);
@@ -126,7 +126,7 @@ boolean SCKBase::checkText(char* text, char *text1)
   else return false;
 }
 
-boolean SCKBase::compareData(char* text, char* text1)
+boolean SCKBase::compareData(const char* text, const char* text1)
 {
   if ((strlen(text))!=(strlen(text1))) return false;
   else 
@@ -593,8 +593,7 @@ void SCKBase::skipRemainderOfResponse(unsigned int timeOut) {
   {
     if (Serial1.available())
     { 
-      byte temp = Serial1.read();
-      //Serial.write(temp);
+      Serial1.read();
       time = millis();
     }
   }
@@ -661,12 +660,12 @@ boolean SCKBase::enterCommandMode() {
 }
 
 
-boolean SCKBase::sleep() {
+void SCKBase::sleep() {
   enterCommandMode();
   sendCommand(F("sleep"));
 }
 
-boolean SCKBase::reset() {
+void SCKBase::reset() {
   enterCommandMode();
   sendCommand(F("factory R"), false, "Set Factory Defaults"); // Store settings
   sendCommand(F("save"), false, "Storing in config"); // Store settings
@@ -706,7 +705,7 @@ boolean SCKBase::connect()
         sendCommand(F("set wlan auth "), true);
         sendCommand(auth);
         boolean mode = true;
-        if ((auth==WEP)||(auth==WEP64)) mode=false;
+        if (strcmp (auth, WEP) == 0 || strcmp (auth, WEP64) == 0) mode=false;
         ssid = readData(DEFAULT_ADDR_SSID, nets, INTERNAL);
         sendCommand(F("set wlan ssid "), true);
         sendCommand(ssid);
@@ -766,8 +765,9 @@ boolean SCKBase::ready()
       exitCommandMode();
       return(true);
     }
-  } 
- 
+  }
+
+  return false; 
 }
 
 boolean connected = false;
@@ -834,7 +834,11 @@ char* SCKBase::MAC() {
       exitCommandMode();
     }        
   }
-  return "-1";
+
+  buffer [0] = '-';
+  buffer [1] = '1';
+  buffer [2] = '\0';
+  return buffer;
 }
 
 char* SCKBase::id() {
@@ -952,7 +956,8 @@ boolean SCKBase::update() {
       return true;
     }
   }
-  else return false;
+  
+  return false;
 }
 
 uint32_t baud[7]={
