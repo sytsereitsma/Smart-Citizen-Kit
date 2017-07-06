@@ -954,14 +954,14 @@ void SCKAmbient::serialRequests()
         int check_data = addData(inByte);
         if (check_data==1) 
           {
-            if (base_.checkText("###", buffer_int)) { debugON= true; temp_mode = sensor_mode; sensor_mode = OFFLINE; } //Serial.println(F("AOK"));} //Terminal SCK ON
-            else if (base_.checkText("exit", buffer_int)) {
+            if (base_.checkText(F("###"), buffer_int)) { debugON= true; temp_mode = sensor_mode; sensor_mode = OFFLINE; } //Serial.println(F("AOK"));} //Terminal SCK ON
+            else if (base_.checkText(F("exit"), buffer_int)) {
               Serial.println(F("EXIT"));
               serial_bridge = false;
               sensor_mode = temp_mode;
               debugON= false;
             }
-            else if (base_.checkText("$$$", buffer_int))  //Terminal WIFI ON
+            else if (base_.checkText(F("$$$"), buffer_int))  //Terminal WIFI ON
             {
               digitalWrite(AWAKE, HIGH); 
               delayMicroseconds(100);
@@ -973,18 +973,18 @@ void SCKAmbient::serialRequests()
               debugON= true;
             }
             /*Reading commands*/
-            else if (base_.checkText("get sck info\r", buffer_int))           Serial.println(FirmWare);
-            else if (base_.checkText("get wifi info\r", buffer_int))          Serial.println(base_.getWiFlyVersion());
-            else if (base_.checkText("get mac\r", buffer_int))                Serial.println(base_.readData(EE_ADDR_MAC, 0, INTERNAL));
-            else if (base_.checkText("get wlan ssid\r", buffer_int))          printNetWorks(DEFAULT_ADDR_SSID, true);
-            else if (base_.checkText("get wlan phrase\r", buffer_int))        printNetWorks(DEFAULT_ADDR_PASS, true);
-            else if (base_.checkText("get wlan auth\r", buffer_int))          printNetWorks(DEFAULT_ADDR_AUTH, true);
-            else if (base_.checkText("get wlan ext_antenna\r", buffer_int))   printNetWorks(DEFAULT_ADDR_ANTENNA, true);
-            else if (base_.checkText("get mode sensor\r", buffer_int))        Serial.println(base_.readData(EE_ADDR_SENSOR_MODE, INTERNAL));
-            else if (base_.checkText("get time update\r", buffer_int))        Serial.println(base_.readData(EE_ADDR_TIME_UPDATE, INTERNAL));
-            else if (base_.checkText("get number updates\r", buffer_int))     Serial.println(base_.readData(EE_ADDR_NUMBER_UPDATES, INTERNAL));
-            else if (base_.checkText("get apikey\r", buffer_int))             Serial.println(base_.readData(EE_ADDR_APIKEY, 0, INTERNAL));
-            else if (base_.checkText("get all\r", buffer_int)) {
+            else if (base_.checkText(F ("get sck info\r"), buffer_int))           Serial.println(FirmWare);
+            else if (base_.checkText(F ("get wifi info\r"), buffer_int))          Serial.println(base_.getWiFlyVersion());
+            else if (base_.checkText(F ("get mac\r"), buffer_int))                Serial.println(base_.readData(EE_ADDR_MAC, 0, INTERNAL));
+            else if (base_.checkText(F ("get wlan ssid\r"), buffer_int))          printNetWorks(DEFAULT_ADDR_SSID, true);
+            else if (base_.checkText(F ("get wlan phrase\r"), buffer_int))        printNetWorks(DEFAULT_ADDR_PASS, true);
+            else if (base_.checkText(F ("get wlan auth\r"), buffer_int))          printNetWorks(DEFAULT_ADDR_AUTH, true);
+            else if (base_.checkText(F ("get wlan ext_antenna\r"), buffer_int))   printNetWorks(DEFAULT_ADDR_ANTENNA, true);
+            else if (base_.checkText(F ("get mode sensor\r"), buffer_int))        Serial.println(base_.readData(EE_ADDR_SENSOR_MODE, INTERNAL));
+            else if (base_.checkText(F ("get time update\r"), buffer_int))        Serial.println(base_.readData(EE_ADDR_TIME_UPDATE, INTERNAL));
+            else if (base_.checkText(F ("get number updates\r"), buffer_int))     Serial.println(base_.readData(EE_ADDR_NUMBER_UPDATES, INTERNAL));
+            else if (base_.checkText(F ("get apikey\r"), buffer_int))             Serial.println(base_.readData(EE_ADDR_APIKEY, 0, INTERNAL));
+            else if (base_.checkText(F ("get all\r"), buffer_int)) {
               Serial.print(F("|"));
               Serial.print(FirmWare);
               Serial.print(F("|"));
@@ -1004,33 +1004,33 @@ void SCKAmbient::serialRequests()
               Serial.print(F("|"));
               Serial.print(base_.readData(EE_ADDR_NUMBER_UPDATES, INTERNAL));
               Serial.println(F("|"));
-            } else if (base_.checkText("post data\r", buffer_int)) {
+            } else if (base_.checkText(F("post data\r"), buffer_int)) {
               execute(true);
             }
             /*Write commands*/
-            else if (base_.checkText("set wlan ssid ", buffer_int))
+            else if (base_.checkText(F("set wlan ssid "), buffer_int))
             {
                 addNetWork(DEFAULT_ADDR_SSID, buffer_int);
                 sensor_mode = base_.readData(EE_ADDR_SENSOR_MODE, INTERNAL); 
                 if (TimeUpdate < 60) sleep = false;
                 else sleep = true; 
             }
-            else if (base_.checkText("set wlan phrase ", buffer_int)) addNetWork(DEFAULT_ADDR_PASS, buffer_int);
-            else if (base_.checkText("set wlan key ", buffer_int)) addNetWork(EE_ADDR_NUMBER_NETS, buffer_int);
-            else if (base_.checkText("set wlan ext_antenna ", buffer_int))  addNetWork(DEFAULT_ADDR_ANTENNA, buffer_int);
-            else if (base_.checkText("set wlan auth ", buffer_int)) addNetWork(DEFAULT_ADDR_AUTH, buffer_int);
-            else if (base_.checkText("clear nets\r", buffer_int)) base_.writeData(EE_ADDR_NUMBER_NETS, networks, INTERNAL);
-            else if (base_.checkText("set mode sensor ", buffer_int)) base_.writeData(EE_ADDR_SENSOR_MODE, atol(buffer_int), INTERNAL);
-            else if (base_.checkText("set time update ", buffer_int)) {
+            else if (base_.checkText (F("set wlan phrase "), buffer_int)) addNetWork(DEFAULT_ADDR_PASS, buffer_int);
+            else if (base_.checkText (F("set wlan key "), buffer_int)) addNetWork(EE_ADDR_NUMBER_NETS, buffer_int);
+            else if (base_.checkText (F("set wlan ext_antenna "), buffer_int))  addNetWork(DEFAULT_ADDR_ANTENNA, buffer_int);
+            else if (base_.checkText (F("set wlan auth "), buffer_int)) addNetWork(DEFAULT_ADDR_AUTH, buffer_int);
+            else if (base_.checkText (F("clear nets\r"), buffer_int)) base_.writeData(EE_ADDR_NUMBER_NETS, networks, INTERNAL);
+            else if (base_.checkText (F("set mode sensor "), buffer_int)) base_.writeData(EE_ADDR_SENSOR_MODE, atol(buffer_int), INTERNAL);
+            else if (base_.checkText (F("set time update "), buffer_int)) {
               TimeUpdate = atol(buffer_int);
               base_.writeData(EE_ADDR_TIME_UPDATE, TimeUpdate, INTERNAL);
             }
-            else if (base_.checkText("set number updates ", buffer_int)) base_.writeData(EE_ADDR_NUMBER_UPDATES, atol(buffer_int), INTERNAL);
-            else if (base_.checkText("set apikey ", buffer_int)){
+            else if (base_.checkText (F("set number updates "), buffer_int)) base_.writeData(EE_ADDR_NUMBER_UPDATES, atol(buffer_int), INTERNAL);
+            else if (base_.checkText (F("set apikey "), buffer_int)){
               eeprom_write_ok = true;
               address_eeprom = EE_ADDR_APIKEY;
             } 
-            else if (base_.checkText("clear memory\r", buffer_int)) base_.clearmemory();
+            else if (base_.checkText (F("clear memory\r"), buffer_int)) base_.clearmemory();
           }
         else if (check_data == -1) Serial.println("Invalid command.");
         if (serial_bridge) Serial1.write(inByte); 

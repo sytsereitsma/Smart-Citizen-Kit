@@ -19,6 +19,26 @@
 
 #define debugBASE false
 
+namespace {
+  void extractArgument (const char* argStart, char* argument) {
+    const char* pos = argStart;
+
+    while (*pos != '\0' && *argument != '\0') {
+      if (*pos == '\n' || *pos == '\r') {
+        *argument = '\0';
+      }
+      else if (*pos != ' ') {
+        *argument = *pos;
+        ++argument;
+      }
+
+      ++pos;
+    }
+    
+    *argument = '\0';
+  }
+
+}
 
 
 void SCKBase::begin() {
@@ -101,42 +121,36 @@ float SCKBase::average(int anaPin) {
   return(average);
 }
 
-boolean SCKBase::checkText(const char* text, char *text1)
+boolean SCKBase::checkText(const char* pattern, char *request)
 {
-  byte check = 0;
-  byte limit = strlen(text);
-  int i = 0;
-  for (i = 0; ((i< strlen(text1))&&(check<limit)); i++)
-    {
-        if (text[check]==text1[i]) check++;
-        else check = 0;
-    }
-  if (check == limit) 
-    {
-      limit = strlen(text1);
-      int j = 0;
-      for (j = 0; i<=limit; j++) 
-        {
-          if (text1[i]=='\r') text1[j]=0x00;
-          else text1[j] = text1[i];
-          i++;
-        }
-      return true;
-    }
-  else return false;
+  const char* pos (strstr (request, pattern));
+  if (!pos) {
+    return false;
+  }
+
+  pos += strlen (pattern);
+  extractArgument (pos, request);
+
+  return true;
 }
 
-boolean SCKBase::compareData(const char* text, const char* text1)
+boolean SCKBase::checkText(const __FlashStringHelper* pattern, char *request)
 {
-  if ((strlen(text))!=(strlen(text1))) return false;
-  else 
-  {
-    for(int i=0; i<strlen(text); i++)
-    {
-      if (text[i]!=text1[i]) return false;
-    }
+  const char* pattern_p (reinterpret_cast <const char*> (pattern));
+  const char* pos (strstr_P (request, pattern_p));
+  if (!pos) {
+    return false;
   }
+
+  pos += strlen_P (pattern_p);
+  extractArgument (pos, request);
+
   return true;
+}
+
+boolean SCKBase::compareData(const char* left, const char* right)
+{
+  return strcmp (left, right) == 0;
 }
 
 float kr= ((float)P1*1000)/RES;     //  Resistance conversion Constant for the digital pot.

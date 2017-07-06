@@ -101,4 +101,6 @@ enum {
 	B00001100 = 12
 };
 
+#define strstr_P(s, p) strstr(s, (const char*)p)
+#define strlen_P(s) strlen((const char*)s)
 #endif // __ARDUINO_STUBS_H_

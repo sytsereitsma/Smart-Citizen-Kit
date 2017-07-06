@@ -25,6 +25,7 @@ public:
     void clearmemory();
     float average(int anaPin);
     boolean checkText(const char* text, char* text1);
+    boolean checkText(const __FlashStringHelper* text, char* text1);
     boolean compareData(const char* text, const char* text1);
     void writeMCP(byte deviceaddress, byte address, int data );
     int readMCP(int deviceaddress, uint16_t address );
